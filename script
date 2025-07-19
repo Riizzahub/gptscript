@@ -1,0 +1,75 @@
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/AbstractPoo/Main/main/Notifications.lua"))()
+
+local function createFakeDupeEffect()
+    -- Визуальные эффекты (клиентские)
+    local effectsFolder = Instance.new("Folder")
+    effectsFolder.Name = "PetDupeEffects"
+    effectsFolder.Parent = workspace
+    
+    -- Эффект частиц
+    local particleEmitter = Instance.new("ParticleEmitter")
+    particleEmitter.Color = ColorSequence.new(Color3.fromRGB(255, 215, 0))
+    particleEmitter.Size = NumberSequence.new(0.5)
+    particleEmitter.Texture = "rbxassetid://242551378"
+    particleEmitter.Parent = effectsFolder
+    particleEmitter:Emit(50)
+    
+    -- Звуковой эффект
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://138081500"
+    sound.Volume = 0.7
+    sound.Parent = effectsFolder
+    sound:Play()
+    
+    game:GetService("Debris"):AddItem(effectsFolder, 5)
+end
+
+local Window = Rayfield:CreateWindow({
+    Name = "🌼 Garden Duplicator",
+    LoadingTitle = "Pet Dupe System",
+    LoadingSubtitle = "by YourName",
+    ConfigurationSaving = {
+        Enabled = false
+    }
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+
+MainTab:CreateButton({
+    Name = "✨ Duplicate Pet",
+    Callback = function()
+        -- Создаем прогресс-бар
+        local progressInfo = Window:CreatePrompt({
+            Name = "Duplicating...",
+            LoadingTitle = "Pet Duplication",
+            LoadingSubtitle = "Please wait",
+            Duration = 3
+        })
+        
+        -- Имитация процесса
+        local startTime = tick()
+        while tick() - startTime < 3 do
+            progressInfo:SetProgress((tick() - startTime) / 3 * 100)
+            task.wait(0.05)
+        end
+        
+        -- Визуальные эффекты
+        createFakeDupeEffect()
+        
+        -- Уведомление
+        Notification.new(
+            "success", 
+            "Success!", 
+            "Pet duplicated successfully!",
+            5
+        )
+    end
+})
+
+MainTab:CreateParagraph({
+    Title = "⚠️ Important Note",
+    Content = "This is a VISUAL EFFECT ONLY and does not actually duplicate pets. For demonstration purposes in Grow a Garden."
+})
+
+Rayfield:LoadConfiguration()
